@@ -9,5 +9,7 @@ public class BrowserSettings : IConfiguration
     public bool HeadLess { get; set; }
     public int TimeOutSeconds { get; set; }
     public string Type { get; set; }
+    public string Login { get; set; }
+    public string Password { get; set; }
 }
 #pragma warning restore CS8618
