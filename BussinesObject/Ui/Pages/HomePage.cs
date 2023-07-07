@@ -27,4 +27,11 @@ public class HomePage : BasePage
 
         return this;
     }
+
+    public RequirementsPage OpenRequirements()
+    {
+        RequirementsButton.Click();
+
+        return new RequirementsPage();
+    }
 }

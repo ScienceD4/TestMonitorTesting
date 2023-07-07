@@ -11,4 +11,7 @@ public static class DataGenerator
     public static string GetRandomLastName() => new Faker().Name.LastName();
 
     public static string GetRandomPhone() => new Faker().Phone.PhoneNumber("+79#########");
+
+    public static string GetText() => new Faker().Lorem.Paragraph();
+    public static string GetSentence() => new Faker().Lorem.Sentence();
 }
