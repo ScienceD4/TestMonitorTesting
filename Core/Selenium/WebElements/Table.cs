@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Core.Selenium.WebElements;
 
-public class Table<TRecord> : BaseElement where TRecord : new()
+public class Table<TRecord> : BaseElement where TRecord : RecordBase, new()
 {
     private static readonly By locatorRows = By.XPath(".//tbody/tr");
     private static readonly By locatorItem = By.XPath("./child::td");
@@ -17,12 +17,19 @@ public class Table<TRecord> : BaseElement where TRecord : new()
 
     public Table<TRecord> GetData()
     {
-        Parse();
+        Value = Parse();
 
         return this;
     }
 
-    private void Parse()
+    public Table<TRecord> FillIn()
+    {
+        Parse(true);
+
+        return this;
+    }
+
+    private List<TRecord> Parse(bool initAction = false)
     {
         var webRows = WebElement.FindElements(locatorRows);
         var listRecords = new List<TRecord>();
@@ -47,9 +54,18 @@ public class Table<TRecord> : BaseElement where TRecord : new()
                 }
             }
 
+            if (initAction)
+            {
+                var findedRecord = Value?.FirstOrDefault(x => x.Check(record));
+                if (findedRecord?.CurrentAction is not null)
+                {
+                    items[findedRecord.CurrentAction.Index].FindElement(findedRecord.CurrentAction.Locator).Click();
+                }
+            }
+
             listRecords.Add(record);
         }
 
-        Value = listRecords;
+        return listRecords;
     }
 }
