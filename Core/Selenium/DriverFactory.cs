@@ -32,7 +32,7 @@ public static class DriverFactory
                 break;
         }
 
-        webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(Settings.Settings.Browser.TimeOutSeconds);
+        webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(Settings.Settings.Browser.ImplicitTimeOutSeconds);
         webDriver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(Settings.Settings.Browser.TimeOutSeconds * 3);
         webDriver.Manage().Window.Size = new System.Drawing.Size(1920, 1080);
 

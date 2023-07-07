@@ -22,12 +22,12 @@ public class LoginPage : BasePage
         return this;
     }
 
-    public LoginPage LogIn()
+    public HomePage LogIn()
     {
         Email.FillIn(USER_NAME);
         Password.FillIn(PASSWORD);
         Login.Click();
 
-        return new LoginPage();
+        return new HomePage();
     }
 }

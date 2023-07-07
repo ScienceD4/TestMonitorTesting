@@ -1,6 +1,5 @@
 ﻿using Allure.Net.Commons;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.Extensions;
 
@@ -8,7 +7,7 @@ namespace Core.Selenium;
 
 public class Browser
 {
-    private static readonly ThreadLocal<Browser> browserInstances = new();
+    private static readonly ThreadLocal<Browser?> browserInstances = new();
     private readonly IWebDriver driver;
 
     public bool IsSaveOnAllure { get; set; } = true;
@@ -48,6 +47,7 @@ public class Browser
     public void CloseBrowser()
     {
         Driver?.Dispose();
+        browserInstances.Value = null;
     }
 
     public void ContextClickElement(IWebElement element)

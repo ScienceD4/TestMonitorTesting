@@ -24,7 +24,6 @@
     <Folder Include="Api\RestCore\" />
     <Folder Include="Api\RestEntities\" />
     <Folder Include="Api\Utils\" />
-    <Folder Include="Ui\Steps\" />
   </ItemGroup>
 
 </Project>

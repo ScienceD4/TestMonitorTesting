@@ -2,9 +2,9 @@
 
 namespace BussinesObject.Ui.Steps;
 
-public class LoginStep
+public static class LoginStep
 {
-    public static LoginPage Login()
+    public static HomePage Login()
     {
         return new LoginPage().Show().LogIn();
     }

@@ -1,21 +1,21 @@
-﻿using OpenQA.Selenium;
+﻿using Core.Selenium.Attributes;
+using OpenQA.Selenium;
+using System.Reflection;
 
 namespace Core.Selenium.WebElements;
 
-public class Table : BaseElement
+public class Table<TRecord> : BaseElement where TRecord : new()
 {
-    private static readonly By locatorCol = By.XPath(".//thead//th");
     private static readonly By locatorRows = By.XPath(".//tbody/tr");
-    private static readonly By locatorItem = By.XPath("./child::*");
+    private static readonly By locatorItem = By.XPath("./child::td");
 
-    public List<string> Columns { get; set; }
-    public List<Dictionary<string, string>> Rows { get; set; }
+    public List<TRecord>? Value { get; set; }
 
     public Table(By locator) : base(locator)
     {
     }
 
-    public Table GetData()
+    public Table<TRecord> GetData()
     {
         Parse();
 
@@ -24,37 +24,32 @@ public class Table : BaseElement
 
     private void Parse()
     {
-        Columns = WebElement.FindElements(locatorCol)
-            .Select((e, i) =>
-                {
-                    var text = e.Text.Trim().Replace("\r", "").Replace("\n", "");
-                    return string.IsNullOrWhiteSpace(text) ? i.ToString() : text;
-                })
-            .ToList();
-        Rows = new List<Dictionary<string, string>>();
-
         var webRows = WebElement.FindElements(locatorRows);
+        var listRecords = new List<TRecord>();
+        var props = typeof(TRecord).GetProperties();
 
         foreach (var webRow in webRows)
         {
-            var dict = new Dictionary<string, string>();
+            var record = new TRecord();
+            var items = webRow.FindElements(locatorItem);
 
-            var items = webRow.FindElements(locatorItem).Select(e => e.Text).ToList();
-
-            var itemslen = items.Count;
-            for (int i = 0; i < Columns.Count; i++)
+            for (var i = 0; i < items.Count; i++)
             {
-                if (i < itemslen)
+                var propsWithIndex = props.Where(x => x.GetCustomAttribute<RecordIndexAttribute>()?.Index == i);
+
+                foreach (var prop in propsWithIndex)
                 {
-                    dict.Add(Columns[i], items[i]);
-                }
-                else
-                {
-                    dict.Add(Columns[i], string.Empty);
+                    var locator = prop.GetCustomAttribute<RecordLocatorAttribute>()?.Locator;
+                    if (locator is null) continue;
+
+                    var content = items[i].FindElement(locator).Text;
+                    prop.SetValue(record, content);
                 }
             }
 
-            Rows.Add(dict);
+            listRecords.Add(record);
         }
+
+        Value = listRecords;
     }
 }
