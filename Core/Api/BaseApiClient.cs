@@ -4,7 +4,7 @@ namespace Core.Api;
 
 public class BaseApiClient
 {
-    private readonly RestClient client;
+    protected readonly RestClient client;
 
     public BaseApiClient(string url)
     {
