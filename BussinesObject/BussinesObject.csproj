@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <Folder Include="Api\Steps\" />
-    <Folder Include="Api\RestEntities\" />
     <Folder Include="Api\Utils\" />
   </ItemGroup>
 

@@ -25,7 +25,26 @@ public class BaseApiClient
 
     public RestResponse Execute(RestRequest request)
     {
-        LogSession.CurrentSession.Debug($"Resource: '{request.Resource}' Method: '{request.Method}' " +
+        var urlSegments = request.Parameters
+            .Where(p => p.Type == ParameterType.UrlSegment)
+            .Where(x => !string.IsNullOrEmpty(x.Name)
+                    && !string.IsNullOrEmpty(x.Value?.ToString()));
+        var queryStrings = request.Parameters
+            .Where(p => p.Type == ParameterType.QueryString)
+            .Where(x => !string.IsNullOrEmpty(x.Name)
+                    && !string.IsNullOrEmpty(x.Value?.ToString()));
+        var resource = request.Resource;
+
+        foreach (var urlSegment in urlSegments)
+        {
+            resource = resource.Replace($"{{{urlSegment.Name}}}", urlSegment.Value?.ToString());
+        }
+        foreach (var queryString in queryStrings)
+        {
+            resource += "?" + queryString.ToString();
+        }
+
+        LogSession.CurrentSession.Debug($"Resource: '{resource}' Method: '{request.Method}' " +
             $"{request.Parameters.FirstOrDefault(p => p.Type == ParameterType.RequestBody)}");
 
         var response = client.Execute(request);

@@ -6,5 +6,6 @@ public class ApiSettings : IConfiguration
     public string SectionName => "API";
     public string AppUrl { get; set; }
     public string AppToken { get; set; }
+    public int MainProjectId { get; set; }
 }
 #pragma warning restore CS8618
