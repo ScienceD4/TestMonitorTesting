@@ -8,13 +8,13 @@ namespace BussinesObject.Api.Services;
 
 public class RequirementsService : BaseService
 {
-    private readonly static int projectId = Core.Settings.Settings.API.MainProjectId;
-    private readonly static string RequirementsEndpoint = $"requirements";
-    private readonly static string RequirementsTypesEndpoint = "project/{projectId}/requirement-types";
-    private readonly static string RequirementByIdEndpoint = "requirements/{requirementId}";
-    private readonly static string TagsByReqIdEndpoint = "requirement/{requirementId}/tags";
-    private readonly static string TagsEndpoint = $"requirement-tags";
-    private readonly static string TestCasesByReqIdEndpoint = "requirement/{requirementId}/test-cases";
+    private static readonly int projectId = Core.Settings.Settings.API.MainProjectId;
+    private static readonly string RequirementsEndpoint = $"requirements";
+    private static readonly string RequirementsTypesEndpoint = "project/{projectId}/requirement-types";
+    private static readonly string RequirementByIdEndpoint = "requirements/{requirementId}";
+    private static readonly string TagsByReqIdEndpoint = "requirement/{requirementId}/tags";
+    private static readonly string TagsEndpoint = $"requirement-tags";
+    private static readonly string TestCasesByReqIdEndpoint = "requirement/{requirementId}/test-cases";
 
     public RequirementsService() : base(new TestMonitorClient())
     {
