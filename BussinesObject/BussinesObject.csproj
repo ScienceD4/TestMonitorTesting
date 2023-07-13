@@ -18,9 +18,4 @@
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Api\Steps\" />
-    <Folder Include="Api\Utils\" />
-  </ItemGroup>
-
 </Project>

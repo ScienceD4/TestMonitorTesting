@@ -1,90 +1,61 @@
-﻿using BussinesObject.Api.RestEntities;
-using BussinesObject.Api.RestEntities.RequirementModels;
+﻿using BussinesObject.Api.RestEntities.RequirementModels;
 using BussinesObject.Api.Services;
+using BussinesObject.Api.Steps;
+using BussinesObject.Api.Utils;
 using Core.Common;
-using Newtonsoft.Json;
 
 namespace Test.ApiTests;
 
 [TestFixture]
 public class RequirementsServiceTest : BaseTest
 {
+    private static readonly RequirementsService service = RequirementsRequest.Service;
+
     [Test]
     public void GetAllRequirements()
     {
-        var respon = new RequirementsService().GetAllRequirements();
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(respon, Is.Not.Null);
-            Assert.That(respon.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
-        });
+        var respon = service.GetAllRequirements();
+        RequestHelper.CheckResponse(respon, false, System.Net.HttpStatusCode.OK);
     }
 
     [Test]
     public void GetTags()
     {
-        var respon = new RequirementsService().GetTagsByRequirement("1");
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(respon, Is.Not.Null);
-            Assert.That(respon.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
-        });
+        var respon = service.GetTagsByRequirement(1);
+        RequestHelper.CheckResponse(respon, false, System.Net.HttpStatusCode.OK);
     }
 
     [Test]
     public void GetTestCases()
     {
-        var respon = new RequirementsService().GetTestCasesByRequirement("1");
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(respon, Is.Not.Null);
-            Assert.That(respon.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
-        });
+        var respon = service.GetTestCasesByRequirement(1);
+        RequestHelper.CheckResponse(respon, false, System.Net.HttpStatusCode.OK);
     }
 
     [Test]
     public void GetRequirement()
     {
-        var respon = new RequirementsService().GetRequirement("1");
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(respon, Is.Not.Null);
-            Assert.That(respon.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
-        });
+        var respon = service.GetRequirement(1);
+        RequestHelper.CheckResponse(respon, false, System.Net.HttpStatusCode.OK);
     }
 
     [Test]
     public void GetRequirementTypes()
     {
-        var respon = new RequirementsService().GetRequirementTypes();
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(respon, Is.Not.Null);
-            Assert.That(respon.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
-        });
+        var respon = service.GetRequirementTypes();
+        RequestHelper.CheckResponse(respon, false, System.Net.HttpStatusCode.OK);
     }
 
     [Test]
     public void GetAllTags()
     {
-        var respon = new RequirementsService().GetAllTags();
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(respon, Is.Not.Null);
-            Assert.That(respon.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
-        });
+        var respon = service.GetAllTags();
+        RequestHelper.CheckResponse(respon, false, System.Net.HttpStatusCode.OK);
     }
 
     [Test]
     public void CreateAndDeleteRequirement()
     {
-        var service = new RequirementsService();
         var name = DataGenerator.GetSentence();
         var description = DataGenerator.GetText();
         var projectId = Core.Settings.Settings.API.MainProjectId;
@@ -98,30 +69,43 @@ public class RequirementsServiceTest : BaseTest
             Tags = new() { "test" }
         };
 
-        var respon = service.CreateRequirement(model);
-        Assert.Multiple(() =>
-        {
-            Assert.That(respon, Is.Not.Null);
-            Assert.That(respon.Content, Is.Not.Null);
-            Assert.That(respon.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.Created));
-        });
+        var responModel = RequirementsRequest.CreateRequirement(model);
 
-        var responModel = JsonConvert
-            .DeserializeObject<CommonResponse<RequirementResponseModel>>(respon.Content!)?.Data;
-        Assert.Multiple(() =>
-        {
-            Assert.That(responModel, Is.Not.Null);
-            Assert.That(responModel?.Name, Is.EqualTo(name));
-            Assert.That(responModel?.Description, Is.EqualTo(description));
-            Assert.That(responModel?.ProjectId, Is.EqualTo(projectId));
-        });
+        var respon = service.DeleteRequirement(responModel!.Id);
+        RequestHelper.CheckResponse(respon, true, System.Net.HttpStatusCode.NoContent);
+    }
 
-        respon = service.DeleteRequirement(responModel!.Id.ToString());
+    [Test]
+    public void UpdateRequirement()
+    {
+        var name = DataGenerator.GetSentence();
+        var description = DataGenerator.GetText();
+        var requirementId = 7;
+
+        var model = new CreateRequirementModel()
+        {
+            Name = name,
+            Description = description,
+            TypeId = 4,
+        };
+
+        var responModel = RequirementsRequest.UpdateRequirement(requirementId, model);
         Assert.Multiple(() =>
         {
-            Assert.That(respon, Is.Not.Null);
-            Assert.That(respon.Content, Is.Empty);
-            Assert.That(respon.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NoContent));
+            Assert.That(responModel?.Name, Is.EqualTo(model.Name));
+            Assert.That(responModel?.TypeId, Is.EqualTo(model.TypeId));
+            Assert.That(responModel?.Description, Is.EqualTo(model.Description));
         });
+    }
+
+    [Test]
+    public void DeleteAndRestoreRequirement()
+    {
+        var requirementId = 7;
+
+        var respon = service.DeleteRequirement(requirementId);
+        RequestHelper.CheckResponse(respon, true, System.Net.HttpStatusCode.NoContent);
+
+        RequirementsRequest.RestoreRequirement(requirementId);
     }
 }

@@ -13,6 +13,7 @@ public class RequirementsService : BaseService
     private static readonly string RequirementsTypesEndpoint = "project/{projectId}/requirement-types";
     private static readonly string RequirementByIdEndpoint = "requirements/{requirementId}";
     private static readonly string TagsByReqIdEndpoint = "requirement/{requirementId}/tags";
+    private static readonly string RestoreRequirementEndpoint = "requirement/{requirementId}/restore";
     private static readonly string TagsEndpoint = $"requirement-tags";
     private static readonly string TestCasesByReqIdEndpoint = "requirement/{requirementId}/test-cases";
 
@@ -38,7 +39,18 @@ public class RequirementsService : BaseService
         return ApiClient.Execute(request);
     }
 
-    public RestResponse GetRequirement(string requirementId)
+    public RestResponse UpdateRequirement(int requirementId, CreateRequirementModel model)
+    {
+        var request = new RestRequest(RequirementByIdEndpoint, Method.Put)
+            .AddUrlSegment("requirementId", requirementId);
+
+        var body = JsonConvert.SerializeObject(model);
+        request.AddBody(body);
+
+        return ApiClient.Execute(request);
+    }
+
+    public RestResponse GetRequirement(int requirementId)
     {
         var request = new RestRequest(RequirementByIdEndpoint, Method.Get)
             .AddUrlSegment("requirementId", requirementId);
@@ -46,7 +58,15 @@ public class RequirementsService : BaseService
         return ApiClient.Execute(request);
     }
 
-    public RestResponse DeleteRequirement(string requirementId)
+    public RestResponse RestoreRequirement(int requirementId)
+    {
+        var request = new RestRequest(RestoreRequirementEndpoint, Method.Post)
+            .AddUrlSegment("requirementId", requirementId);
+
+        return ApiClient.Execute(request);
+    }
+
+    public RestResponse DeleteRequirement(int requirementId)
     {
         var request = new RestRequest(RequirementByIdEndpoint, Method.Delete)
             .AddUrlSegment("requirementId", requirementId);
@@ -54,7 +74,7 @@ public class RequirementsService : BaseService
         return ApiClient.Execute(request);
     }
 
-    public RestResponse GetTagsByRequirement(string requirementId)
+    public RestResponse GetTagsByRequirement(int requirementId)
     {
         var request = new RestRequest(TagsByReqIdEndpoint, Method.Get)
             .AddUrlSegment("requirementId", requirementId);
@@ -70,7 +90,7 @@ public class RequirementsService : BaseService
         return ApiClient.Execute(request);
     }
 
-    public RestResponse GetTestCasesByRequirement(string requirementId)
+    public RestResponse GetTestCasesByRequirement(int requirementId)
     {
         var request = new RestRequest(TestCasesByReqIdEndpoint, Method.Get)
             .AddUrlSegment("requirementId", requirementId);
