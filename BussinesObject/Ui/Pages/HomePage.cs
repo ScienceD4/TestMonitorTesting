@@ -1,6 +1,9 @@
 ﻿using BussinesObject.Ui.UiEntities;
+using Core;
 using Core.Common;
+using Core.Selenium;
 using Core.Selenium.WebElements;
+using NUnit.Allure.Attributes;
 using OpenQA.Selenium;
 
 namespace BussinesObject.Ui.Pages;
@@ -19,19 +22,24 @@ public class HomePage : BasePage
     public Button TestRunsButton { get; set; } = new(By.XPath("//a[contains(@href, '/plan/milestones')]"));
     public Button IssuesButton { get; set; } = new(By.XPath("//a[contains(@href, '/issues')]"));
 
+    [AllureStep]
     public HomePage PostMessage(string message)
     {
         Message.FillIn(message);
+        Browser.Instance.TakeScreenShot(nameof(Message) + " FillIn");
+        LogSession.CurrentSession.Debug("message: " + message);
         PostButton.Click();
         WaitHelper.Until(2_000, () => Messages.GetMessages().Any(x => x.Content.Equals(message)));
+        Browser.Instance.TakeScreenShot(nameof(PostButton) + " Click");
 
         return this;
     }
 
+    [AllureStep]
     public RequirementsPage OpenRequirements()
     {
         RequirementsButton.Click();
-
+        Browser.Instance.TakeScreenShot(nameof(RequirementsButton) +" Click");
         return new RequirementsPage();
     }
 }
