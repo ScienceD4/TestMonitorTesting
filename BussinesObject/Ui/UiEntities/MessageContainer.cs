@@ -1,6 +1,7 @@
 ﻿using Core.Common;
 using Core.Selenium;
 using Core.Selenium.WebElements;
+using NUnit.Allure.Attributes;
 using OpenQA.Selenium;
 using System.Collections.ObjectModel;
 
@@ -34,12 +35,15 @@ public class MessageContainer
         return messages;
     }
 
+    [AllureStep]
     public void DeleteAllMessage()
     {
         while (Messages.Any())
         {
             deleteMessage.Click();
+            Browser.Instance.TakeScreenShot(nameof(deleteMessage) + "Click");
             deleteConfirm.Click();
+            Browser.Instance.TakeScreenShot(nameof(deleteConfirm) + "Click");
             deleteConfirm.Wait(x => !x.IsExist);
         }
     }
