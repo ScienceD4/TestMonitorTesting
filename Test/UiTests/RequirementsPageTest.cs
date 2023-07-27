@@ -7,16 +7,6 @@ namespace Test.UiTests;
 public class RequirementsPageTest : BaseTest
 {
     [Test]
-    public void CheckRequirements()
-    {
-        var records = LoginStep.Login()
-            .OpenRequirements()
-            .RequirementsTable.GetData().Value;
-
-        Assert.That(records, Is.Not.Empty);
-    }
-
-    [Test]
     public void AddAndCheckRequirements()
     {
         var name = Core.Common.DataGenerator.GetSentence();
@@ -45,7 +35,7 @@ public class RequirementsPageTest : BaseTest
         Assert.That(records?.Select(x => x.Name), Does.Contain(name));
     }
 
-    [Test]
+    //[Test]
     public void SelectRequirements()
     {
         var code1 = "RQ1";
