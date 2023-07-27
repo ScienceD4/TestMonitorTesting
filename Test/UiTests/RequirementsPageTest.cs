@@ -34,33 +34,4 @@ public class RequirementsPageTest : BaseTest
 
         Assert.That(records?.Select(x => x.Name), Does.Contain(name));
     }
-
-    //[Test]
-    public void SelectRequirements()
-    {
-        var code1 = "RQ1";
-        var code2 = "RQ2";
-
-        Assert.DoesNotThrow(() =>
-        {
-            var page = LoginStep.Login()
-            .OpenRequirements();
-
-            page.RequirementsTable.Value = new List<RequirementsRecord>
-            {
-                new RequirementsRecord
-                {
-                    Code = code1,
-                    Action = RequirementsRecord.ActionRequirements.Select
-                },
-                new RequirementsRecord
-                {
-                    Code = code2,
-                    Action = RequirementsRecord.ActionRequirements.Select
-                }
-            };
-
-            page.RequirementsTable.FillIn();
-        });
-    }
 }
