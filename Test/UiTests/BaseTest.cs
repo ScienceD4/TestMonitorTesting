@@ -4,6 +4,7 @@ using NUnit.Allure.Core;
 namespace Test.UiTests;
 
 [AllureNUnit]
+[Category("Ui")]
 public class BaseTest
 {
     [TearDown]
