@@ -5,6 +5,7 @@ namespace Test.UiTests;
 
 [AllureNUnit]
 [Category("Ui")]
+[Parallelizable(ParallelScope.Fixtures)]
 public class BaseTest
 {
     [TearDown]
