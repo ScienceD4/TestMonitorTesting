@@ -8,7 +8,6 @@ public static class Settings
     private static readonly IConfigurationRoot configurationRoot = GetConfigurationRoot();
 
     public static BrowserSettings Browser { get; } = BindConfiguration<BrowserSettings>();
-    public static UserDataSettings UserData { get; } = BindConfiguration<UserDataSettings>();
     public static ApiSettings API { get; } = BindConfiguration<ApiSettings>();
 
     private static T BindConfiguration<T>() where T : IConfiguration, new()

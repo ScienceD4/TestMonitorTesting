@@ -5,10 +5,11 @@ namespace Core.Selenium.WebElements;
 
 public abstract class BaseElement
 {
-    private readonly By locator;
+    protected readonly By? locator;
+    private readonly By? childLocator;
     protected static IWebDriver Driver => Browser.Instance.Driver;
 
-    public IWebElement WebElement => Driver.WaitLoad(d => d.FindElement(locator), Settings.Settings.Browser.TimeOutSeconds * 1000);
+    public IWebElement WebElement => Find();
     public bool IsExist => ElementIsExist();
 
     protected BaseElement(By locator)
@@ -16,9 +17,40 @@ public abstract class BaseElement
         this.locator = locator;
     }
 
-    protected void Wait()
+    protected BaseElement(By parentLocator, By childLocator)
     {
-        Driver.WaitLoad(x => IsExist, Settings.Settings.Browser.TimeOutSeconds * 1000);
+        this.locator = parentLocator;
+        this.childLocator = childLocator;
+    }
+
+    private IWebElement Find()
+    {
+        IWebElement webElement;
+
+        if (childLocator != null && locator != null)
+        {
+            webElement = Driver.FindElement(locator).FindElement(childLocator);
+        }
+        else if (locator != null)
+        {
+            webElement = Driver.FindElement(locator);
+        }
+        else
+        {
+            throw new Exception("locator is null");
+        }
+
+        return webElement;
+    }
+
+    public void WaitExist()
+    {
+        Wait(x => IsExist);
+    }
+
+    public void Wait(Predicate<BaseElement> condition)
+    {
+        Driver.WaitLoad(x => condition(this), Settings.Settings.Browser.TimeOutSeconds * 1000);
     }
 
     private bool ElementIsExist()

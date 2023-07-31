@@ -20,4 +20,9 @@ public static class WaitHelper
     {
         return new WebDriverWait(driver, TimeSpan.FromMilliseconds(timeout)).Until(condition);
     }
+
+    public static TResult WaitLoad<TResult>(this IWebDriver driver, Func<IWebDriver, TResult> condition)
+    {
+        return driver.WaitLoad(condition, Settings.Settings.Browser.TimeOutSeconds * 1000);
+    }
 }

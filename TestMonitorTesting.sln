@@ -10,7 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{278B8B22-FC4D-4093-A983-C5B7D26304CA}"
 	ProjectSection(SolutionItems) = preProject
 		AzureDevops-pipeline.yml = AzureDevops-pipeline.yml
-		Jenkinfile.txt = Jenkinfile.txt
+		Jenkinsfile.config = Jenkinsfile.config
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{0967EDE3-0E4B-4F8E-8C34-F98A800E4E1F}"

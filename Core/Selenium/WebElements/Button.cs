@@ -11,19 +11,19 @@ public class Button : BaseElement
 
     public void Click()
     {
-        Wait();
+        WaitExist();
         WebElement.Click();
     }
 
     public void ClickByJava()
     {
-        Wait();
+        WaitExist();
         Browser.Instance.ExecuteScript("arguments[0].click()", WebElement);
     }
 
     public void ClickWithActions()
     {
-        Wait();
+        WaitExist();
         new Actions(Driver)
             .MoveToElement(WebElement)
             .Click()

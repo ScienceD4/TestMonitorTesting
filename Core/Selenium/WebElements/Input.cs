@@ -12,7 +12,7 @@ public class Input : BaseElement
     {
         if (string.IsNullOrEmpty(text)) return;
 
-        Wait();
+        WaitExist();
         WebElement.Clear();
         WebElement.SendKeys(text);
     }

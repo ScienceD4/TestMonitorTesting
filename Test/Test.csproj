@@ -56,9 +56,4 @@
 		</None>-->
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="ApiTests\" />
-	  <Folder Include="UiTests\" />
-	</ItemGroup>
-
 </Project>
